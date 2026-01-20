@@ -1,29 +1,65 @@
-# Candidate Exercise Scaffold
+# Minty Host – Practical Case
 
-This repo is prepped so candidates can focus on the exercise (frontend changes, a few API routes/controllers, maybe a migration/model) without setup friction.
+This project represents a web application for a company that manages bookings for touristic apartments. The application is built with **Laravel** on the backend and **Vue** on the frontend.
 
-## What’s already done
-- Laravel app configured for SQLite (`database/database.sqlite` is committed).
-- Default migrations already applied (users, sessions, cache, jobs, failed jobs).
-- `.env` and `.env.example` point to the bundled SQLite DB and include an `APP_KEY`.
-- Tailwind CSS v4 is wired through Vite (`resources/css/app.css`, `@tailwindcss/vite` plugin).
+The core booking data model and related functionality are already implemented. The goal of this practical case is to extend the existing system by introducing a new feature that allows the company to manage **guest data associated with bookings**.
 
-## Prerequisites
-- PHP 8.2+ with the SQLite extension enabled.
-- Composer
-- Node.js + npm (only if the exercise touches the frontend build).
+As part of this exercise, you will design and implement the necessary backend and frontend changes to link guests to bookings, expose the required data through the API, and display and manage relevant information in the user interface.
 
-## Getting started
-1) Install deps: `composer install` and `npm install`.  
-2) Env is already provided (`.env`). If you prefer to regenerate: `cp .env.example .env`.  
-3) You’re ready to run the app. If you want to re-run migrations or add new ones: `php artisan migrate`.
 
-## Frontend / Tailwind
-- Entrypoints: `resources/js/app.ts` imports `resources/css/app.css` (Tailwind layer).
-- Dev server: `npm run dev` (or `npm run dev -- --host` if needed).
-- Production build: `npm run build`.
 
-## Notes for candidates
-- DB lives at `database/database.sqlite`; no setup required.
-- If you add migrations/models, `php artisan migrate` will update the same DB.
-- Keep focus on the specified components; everything else should be ready to go.
+## Objectives
+
+- Complete the case in approximately **2 hours**.  
+- Follow **Laravel and Vue conventions**, ensuring clean, readable, and well-structured code.  
+- Demonstrate autonomy in providing a **user-friendly interface**, including responsive design and helpful user feedback.  
+- **Showcase end-to-end implementation skills:** Ability to build features that integrate frontend and backend seamlessly.  
+- **Use the provided stack:** Stylize with Tailwind CSS, use Vue 3 Composition API, Pinia, and Laravel Eloquent ORM.
+
+
+
+## Project Setup
+
+### Prerequisites
+- PHP 8.2+ with the SQLite extension enabled  
+- Composer  
+- Node.js + npm  
+
+### Getting Started
+1. Install dependencies:  
+   `composer install`  
+   `npm install`  
+2. The `.env` file is already provided. If you prefer to regenerate it:  
+   `cp .env.example .env`  
+3. Run the app. If you need to re-run migrations or create new ones:  
+   `php artisan migrate`  
+
+
+
+## Project Context
+
+The project includes a minimal setup to help you focus on the exercise:
+
+### Laravel Backend
+- Configured to use **SQLite** (`database/database.sqlite` is committed) with dummy booking entries already included.  
+- Core **Booking model** and functionality are already implemented.  
+- The `getBookings` method in `MintyTestController` is exposed via `api.php` for fetching booking data.  
+
+### Frontend (Vue + Pinia)
+- `minty-test.js` Pinia store is provided and includes a method to fetch bookings from the API.  
+- `Welcome.vue` serves as the main container for the frontend exercise and is already tied to the Pinia store. This is where you will implement the UI to display bookings and manage guest data.
+
+# Instructions
+
+| Task | Description |
+|------|------------|
+| Implement new Guest data model | Complete the `create_guests_table.php` migration and implement the relevant `Guest` model. Add relationships to link guests to bookings. |
+| Display Bookings | Using the Pinia store, display the bookings in a **grid layout**. Ensure all relevant fields are shown and use **Tailwind CSS** to style the booking cards. |
+| Implement Guest Functionality | Extend the application to allow complete management of guest data. Users should be able to **create, read, update, and delete** guest entries directly linked to individual bookings. |
+| Guest Interface | Implement the guest functionality so that it is accessible **within each booking card**. You are free to choose the approach and layout that provides the best UX for managing guests. |
+| Guest Filter | Integrate a dynamic search feature that allows users to find bookings based on guest names. |
+| Booking Pagination | Implement pagination for the list of bookings. You are free to choose the approach that provides the best UX and performance. |
+| Extra Improvements (Optional) | Polish the UI, add comments, improve code quality, or make other enhancements if you have extra time. |
+
+
+# Good luck!
