@@ -10,7 +10,7 @@ export const useMintyTestStore = defineStore('minty-test', {
 
     actions: {
         async getBookings() {
-            this.loading = true; 
+            this.loading = true
             try {
                 const response = await fetch('/api/bookings');
 
@@ -40,6 +40,20 @@ export const useMintyTestStore = defineStore('minty-test', {
             } catch (error) {
                 console.error('Error adding guest:', error);
                 return false; 
+            }
+        },
+        async deleteGuest(guestId, bookingId) {
+            try {
+                await axios.delete(`/api/guests/${guestId}`);
+                
+                const booking = this.bookings.find(b => b.id === bookingId);
+                if (booking) {
+                    booking.guests = booking.guests.filter(g => g.id !== guestId);
+                }
+                return true;
+            } catch (error) {
+                console.error('Error borrando huésped:', error);
+                return false;
             }
         }
     },
