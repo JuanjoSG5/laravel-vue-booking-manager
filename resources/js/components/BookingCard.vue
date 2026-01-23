@@ -63,7 +63,7 @@ const removeGuest = async (guestId) => {
             <ul v-if="booking.guests && booking.guests.length > 0">
                 <li v-for="guest in booking.guests" :key="guest.id" class="flex justify-between items-center mb-1">
                     <span>- {{ guest.first_name }} {{ guest.last_name }} ({{ guest.email }})</span>
-                    
+                
                     <button 
                         @click="removeGuest(guest.id)" 
                         class="text-red-600 font-bold ml-2 border px-2 text-xs">
