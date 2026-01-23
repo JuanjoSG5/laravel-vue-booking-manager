@@ -49,4 +49,14 @@ class GuestApiTest extends TestCase
         $response->assertOk();
         $this->assertDatabaseHas('guests', ['id' => $guest->id, 'first_name' => 'Edited Name']);
     }
+
+    public function test_can_delete_guest()
+    {
+        $guest = Guest::factory()->create();
+
+        $response = $this->deleteJson("/api/guests/{$guest->id}");
+
+        $response->assertNoContent();
+        $this->assertDatabaseMissing('guests', ['id' => $guest->id]);
+    }
 }
