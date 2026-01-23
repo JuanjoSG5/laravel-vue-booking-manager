@@ -42,6 +42,23 @@ export const useMintyTestStore = defineStore('minty-test', {
                 return false; 
             }
         },
+        async updateGuest(guestData, bookingId) {
+            try {
+                const response = await axios.put(`/api/guests/${guestData.id}`, guestData);
+                
+                const booking = this.bookings.find(b => b.id === bookingId);
+                if (booking) {
+                    const index = booking.guests.findIndex(g => g.id === guestData.id);
+                    if (index !== -1) {
+                        booking.guests[index] = response.data;
+                    }
+                }
+                return true;
+            } catch (error) {
+                console.error(error);
+                return false;
+            }
+        },
         async deleteGuest(guestId, bookingId) {
             try {
                 await axios.delete(`/api/guests/${guestId}`);

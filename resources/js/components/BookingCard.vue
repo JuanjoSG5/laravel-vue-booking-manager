@@ -10,36 +10,69 @@ const store = useMintyTestStore();
 
 const isAddingGuest = ref(false);
 const isSubmitting = ref(false);
+const editingGuestId = ref(null);
 
 const newGuest = reactive({
     first_name: '',
     last_name: '',
     email: '',
-    phone: ''
+    phone_number: ''
 });
+
+const editGuest = (guest) => {
+    editingGuestId.value = guest.id; 
+    newGuest.first_name = guest.first_name;
+    newGuest.last_name = guest.last_name;
+    newGuest.email = guest.email;
+    newGuest.phone_number = guest.phone_number;
+
+    // To show the form
+    isAddingGuest.value = true;      
+};
 
 const saveGuest = async () => {
     isSubmitting.value = true;
+    let success = false;
 
-    const payload = {
-        booking_id: props.booking.id, 
-        ...newGuest
-    };
+    if (editingGuestId.value){
+        const payload = {
+            id: editingGuestId.value,
+            booking_id: props.booking.id, 
+            ...newGuest
+        };
+    
+        success = await store.updateGuest(payload);
+    }else {
+        const payload = {
+            booking_id: props.booking.id, 
+            ...newGuest
+        };
+    
+        success = await store.addGuest(payload);
+    }
 
-    const success = await store.addGuest(payload);
 
     if (success) {
-        // Limpiar formulario
         newGuest.first_name = '';
         newGuest.last_name = '';
         newGuest.email = '';
-        newGuest.phone = '';
+        newGuest.phone_number = '';
         isAddingGuest.value = false;
+        editingGuestId.value = null;
     } else {
         alert('Error al agregar el huésped.');
     } 
     isSubmitting.value = false;
 };
+
+const cancelForm = () => {
+    isAddingGuest.value = false;
+    editingGuestId.value = null;
+    newGuest.first_name = '';
+    newGuest.last_name = '';
+    newGuest.email = '';
+    newGuest.phone_number = '';
+}
 
 const removeGuest = async (guestId) => {
     if (confirm('¿Borrar huésped?')) {
@@ -65,6 +98,12 @@ const removeGuest = async (guestId) => {
                     <span>- {{ guest.first_name }} {{ guest.last_name }} ({{ guest.email }})</span>
                 
                     <button 
+                        @click="editGuest(guest)" 
+                        class="text-blue-600 font-bold border px-2 text-xs">
+                        Edit
+                    </button>
+
+                    <button 
                         @click="removeGuest(guest.id)" 
                         class="text-red-600 font-bold ml-2 border px-2 text-xs">
                         X
@@ -87,14 +126,14 @@ const removeGuest = async (guestId) => {
                     <input v-model="newGuest.first_name" placeholder="Nombre" required class="border p-1">
                     <input v-model="newGuest.last_name" placeholder="Apellidos" required class="border p-1">
                     <input v-model="newGuest.email" type="email" placeholder="Email" required class="border p-1">
-                    <input v-model="newGuest.phone" placeholder="Teléfono" class="border p-1">
+                    <input v-model="newGuest.phone_number" placeholder="Teléfono" class="border p-1">
                 </div>
 
                 <div class="mt-2 flex gap-2">
                     <button type="submit" :disabled="isSubmitting" class="bg-green-500 text-white px-3 py-1 rounded">
                         Guardar
                     </button>
-                    <button type="button" @click="isAddingGuest = false" class="bg-gray-500 text-white px-3 py-1 rounded">
+                    <button type="button" @click="cancelForm" class="bg-gray-500 text-white px-3 py-1 rounded">
                         Cancelar
                     </button>
                 </div>
