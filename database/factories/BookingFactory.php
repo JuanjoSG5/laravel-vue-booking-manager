@@ -17,8 +17,8 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         return [
-            'checking_in' => $this->faker->dateTimeBetween('+1 days', '+1 month'),
-            'checking_out' => $this->faker->dateTimeBetween('+2 days', '+2 months'),
+            'checkin_at' => $this->faker->dateTimeBetween('+1 days', '+1 month'),
+            'checkout_at' => $this->faker->dateTimeBetween('+2 days', '+2 months'),
             'status' => $this->faker->randomElement(['confirmed', 'canceled']),
         ];
     }
