@@ -168,8 +168,8 @@ const formatDate = (dateStr) => {
             <div>
                 <h2 class="font-bold text-2xl text-gray-800">Reserva #{{ booking.id }}</h2>
                 <div class="text-sm text-gray-500 mt-1 flex gap-3">
-                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">In: {{ formatDate(booking.checkin_at) }}</span>
-                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Out: {{ formatDate(booking.checkout_at) }}</span>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Entrada: {{ formatDate(booking.checkin_at) }}</span>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Salida: {{ formatDate(booking.checkout_at) }}</span>
                 </div>
             </div>
         </div>
