@@ -16,4 +16,28 @@ class GuestController extends Controller
 
         return response()->json($guest, 201);
     }
+
+    public function show(Guest $guest)
+    {
+        return response()->json($guest);
+    }
+
+    public function update(Request $request, Guest $guest)
+    {
+        $validated = $request->validate([
+            'first_name' => 'sometimes|required|string|max:255',
+            'last_name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|string|email|max:255|unique:guests,email,' . $guest->id,
+            'phone_number' => 'sometimes|nullable|string|max:20',
+        ]);
+        $guest->update($validated);
+        return response()->json($guest);
+    }
+
+    public function destroy(Guest $guest)
+    {
+        $guest->delete();
+
+        return response()->json(null, 204);
+    }
 }
