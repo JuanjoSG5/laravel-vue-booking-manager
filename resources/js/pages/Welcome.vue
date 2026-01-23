@@ -16,11 +16,11 @@ watch(searchQuery, (newQuery) => {
     store.getBookings(1, newQuery);
 });
 
-const changePage = (newPage) => {
-    if (!url) return;
-    const urlParams = new URLSearchParams(url.split('?')[1]);
-    const search = urlParams.get('search') || '';
-    store.getBookings(newPage, search);
+const changePage = (linkUrl) => {
+    if (!linkUrl) return;
+    const url = new URL(linkUrl);
+    const page = url.searchParams.get('page') || 1;
+    store.getBookings(page, searchQuery.value);
 }
 </script>
 
@@ -33,7 +33,7 @@ const changePage = (newPage) => {
             v-model="searchQuery" 
             type="text" 
             placeholder="Buscar por nombre de huésped..." 
-            class="p-2 border border-gray-300 rounded shadow-sm w-64 focus:ring-2 focus:ring-blue-200 outline-none"
+            class="w-full sm:w-80 p-2.5 mb-8 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 text-gray-700 placeholder-gray-400"
         >
     
         <div v-if="store.loading" class="text-lg">Cargando reservas...</div>

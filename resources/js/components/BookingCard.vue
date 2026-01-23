@@ -154,35 +154,52 @@ const removeGuest = async (guestId) => {
 <template>
     <div class="border border-gray-400 p-4 rounded mb-4 bg-white">
         
-        <div class="mb-4 border-b pb-2">
-            <h2 class="font-bold text-lg">Reserva #{{ booking.id }}</h2>
-            <p>In: {{ booking.checkin_at }} | Out: {{ booking.checkout_at }}</p>
+        <div class="mb-6 pb-4 border-b border-gray-100 flex justify-between items-end">
+            <div>
+                <h2 class="font-bold text-2xl text-gray-800">Reserva #{{ booking.id }}</h2>
+                <div class="text-sm text-gray-500 mt-1 flex gap-3">
+                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">In: {{ booking.checkin_at }}</span>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Out: {{ booking.checkout_at }}</span>
+                </div>
+            </div>
         </div>
 
         <!-- Lista de Huéspedes -->
-        <div class="mb-4">
-            <h3 class="font-bold">Huéspedes:</h3>
+         <div class="mb-6">
+            <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                Huéspedes 
+                <span v-if="booking.guests" class="text-xs bg-gray-200 text-gray-600 px-2 rounded-full">{{ booking.guests.length }}</span>
+            </h3>
             
-            <ul v-if="booking.guests && booking.guests.length > 0">
-                <li v-for="guest in booking.guests" :key="guest.id" class="flex justify-between items-center mb-1">
-                    <span>- {{ guest.first_name }} {{ guest.last_name }} ({{ guest.email }})</span>
+            <ul v-if="booking.guests && booking.guests.length > 0" class="space-y-2">
+                <li v-for="guest in booking.guests" :key="guest.id" 
+                    class="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-transparent hover:border-gray-200 hover:bg-white hover:shadow-sm transition-all duration-200">
+                    
+                    <div class="flex flex-col">
+                        <span class="font-medium text-gray-800">{{ guest.first_name }} {{ guest.last_name }}</span>
+                        <span class="text-sm text-gray-500">{{ guest.email }}</span>
+                    </div>
                 
-                    <button 
-                        @click="editGuest(guest)" 
-                        class="text-blue-600 font-bold border px-2 text-xs">
-                        Edit
-                    </button>
+                    <div class="flex gap-2">
+                        <button 
+                            @click="editGuest(guest)" 
+                            class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded transition-colors">
+                            Editar
+                        </button>
 
-                    <button 
-                        @click="removeGuest(guest.id)" 
-                        class="text-red-600 font-bold ml-2 border px-2 text-xs">
-                        X
-                    </button>
+                        <button 
+                            @click="removeGuest(guest.id)" 
+                            class="text-xs font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-1.5 rounded transition-colors">
+                            Eliminar
+                        </button>
+                    </div>
                 </li>
             </ul>
-            <p v-else class="text-gray-500 italic">No hay huéspedes.</p>
+            <div v-else class="text-center py-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                <p class="text-gray-500 text-sm">No hay huéspedes registrados.</p>
+            </div>
         </div>
-
+        
         <div>
             <button 
                 v-if="!isAddingGuest" 
