@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreGuestRequest;
+use App\Http\Requests\UpdateGuestRequest;
 use App\Models\Guest;
 
 class GuestController extends Controller
@@ -22,16 +23,10 @@ class GuestController extends Controller
         return response()->json($guest);
     }
 
-    public function update(Request $request, Guest $guest)
+    public function update(UpdateGuestRequest $request, Guest $guest)
     {
-        $validated = $request->validate([
-            'first_name' => 'sometimes|required|string|max:255',
-            'last_name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:guests,email,' . $guest->id,
-            'phone_number' => 'sometimes|nullable|string|max:20',
-        ]);
-        $guest->update($validated);
-        return response()->json($guest);
+        $guest->update($request->validated());
+        return response()->json($guest, 200);
     }
 
     public function destroy(Guest $guest)
