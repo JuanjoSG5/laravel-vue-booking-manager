@@ -20,11 +20,13 @@ class BookingApiTest extends TestCase
         $response = $this->getJson('/api/bookings');
 
         $response->assertOk();
-        $response->assertJsonFragment([
-            'id' => $booking->id
-        ]);
+        
+        $responseData = $response->json()['data']; 
 
-        $this->assertArrayHasKey('guests', $response->json()[0]);
-        $this->assertCount(2, $response->json()[0]['guests']);
+        $this->assertNotEmpty($responseData);
+        $this->assertEquals($booking->id, $responseData[0]['id']);
+
+        $this->assertArrayHasKey('guests', $responseData[0]);
+        $this->assertCount(2, $responseData[0]['guests']);
     }
 }

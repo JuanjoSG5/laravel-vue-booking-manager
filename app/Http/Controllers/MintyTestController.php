@@ -14,11 +14,11 @@ class MintyTestController extends Controller
             // Fake sleep to simulate a long loading time
             sleep(2);
 
-            $query = Booking::with('guest');
+            $query = Booking::with('guests');
 
             if ($request->has('search') && $request->search != '') {
                 $searchTerm = $request->search;
-                $query->whereHas('guest', function ($q) use ($searchTerm) {
+                $query->whereHas('guests', function ($q) use ($searchTerm) {
                     $q->where('first_name', 'like', '%' . $searchTerm . '%')
                       ->orWhere('last_name', 'like', '%' . $searchTerm . '%');
                 });

@@ -5,21 +5,23 @@ export const useMintyTestStore = defineStore('minty-test', {
     state: () => ({
         testUser: 'Candidato/a',
         bookings: [],
+        pagination: {},
         loading: false,
     }),
 
     actions: {
-        async getBookings() {
+        async getBookings(page = 1, search='') {
             this.loading = true
             try {
-                const response = await fetch('/api/bookings');
+                const response = await fetch(`/api/bookings?page=${page}&search=${encodeURIComponent(search)}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch bookings');
                 }
 
                 const data = await response.json();
-                this.bookings = data;
+                this.bookings = data.data;
+                this.pagination = data
             } catch (err) {
                 console.error('Error fetching bookings:', err);
             } finally{
