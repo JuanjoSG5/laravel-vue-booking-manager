@@ -6,7 +6,31 @@ The core booking data model and related functionality are already implemented. T
 
 As part of this exercise, you will design and implement the necessary backend and frontend changes to link guests to bookings, expose the required data through the API, and display and manage relevant information in the user interface.
 
+--- 
 
+## Developer Solution & Notes
+
+I have successfully completed the technical challenge, implementing all mandatory requirements and the **optional improvements**. Below is a summary of the decisions and features included:
+
+### Features Implemented
+*   **Full CRUD System:** Complete management (Create, Read, Update, Delete) of guests within the Booking Card.
+*   **Guest Model:** Created the `guests` table, migration, and the `1:N` relationship with Bookings.
+*   **UI/UX Polish:**
+    *   Used **Tailwind CSS** for a clean, responsive layout.
+    *   Added **loading states** to buttons to prevent duplicate submissions.
+    *   Formatted dates for better readability (e.g., `23 Apr 2026`).
+
+### Extra Improvements (Bonus)
+*   **Dynamic Search:** Implemented a backend search filter to find bookings by guest name (first or last name).
+*   **Pagination:** Added backend pagination (9 items per page) to optimize performance and UI.
+
+### Architecture, Testing & Fixes
+*   **Form Requests:** Implemented dedicated **Laravel Form Requests** (e.g., `StoreGuestRequest`, `UpdateGuestRequest`) to decouple validation logic from the Controller.
+*   **Testing:** 
+    *   Added new tests to verify the integrity of the CRUD operations for Guests.
+    *   Refactored `BookingApiTest` to correctly handle the structure of Laravel's paginated responses.
+
+---
 
 ## Objectives
 
