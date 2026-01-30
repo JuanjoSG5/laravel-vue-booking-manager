@@ -1,90 +1,125 @@
-# Minty Host – Practical Case
+# 🏨 Laravel & Vue Booking Management System
 
-This project represents a web application for a company that manages bookings for touristic apartments. The application is built with **Laravel** on the backend and **Vue** on the frontend.
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![PHPUnit](https://img.shields.io/badge/PHPUnit-Tests-3ea5f3?style=for-the-badge&logo=php&logoColor=white)
 
-The core booking data model and related functionality are already implemented. The goal of this practical case is to extend the existing system by introducing a new feature that allows the company to manage **guest data associated with bookings**.
-
-As part of this exercise, you will design and implement the necessary backend and frontend changes to link guests to bookings, expose the required data through the API, and display and manage relevant information in the user interface.
-
---- 
-
-## Developer Solution & Notes
-
-I have successfully completed the technical challenge, implementing all mandatory requirements and the **optional improvements**. Below is a summary of the decisions and features included:
-
-### Features Implemented
-*   **Full CRUD System:** Complete management (Create, Read, Update, Delete) of guests within the Booking Card.
-*   **Guest Model:** Created the `guests` table, migration, and the `1:N` relationship with Bookings.
-*   **UI/UX Polish:**
-    *   Used **Tailwind CSS** for a clean, responsive layout.
-    *   Added **loading states** to buttons to prevent duplicate submissions.
-    *   Formatted dates for better readability (e.g., `23 Apr 2026`).
-
-### Extra Improvements (Bonus)
-*   **Dynamic Search:** Implemented a backend search filter to find bookings by guest name (first or last name).
-*   **Pagination:** Added backend pagination (9 items per page) to optimize performance and UI.
-
-### Architecture, Testing & Fixes
-*   **Form Requests:** Implemented dedicated **Laravel Form Requests** (e.g., `StoreGuestRequest`, `UpdateGuestRequest`) to decouple validation logic from the Controller.
-*   **Testing:** 
-    *   Added new tests to verify the integrity of the CRUD operations for Guests.
-    *   Refactored `BookingApiTest` to correctly handle the structure of Laravel's paginated responses.
+A robust Full Stack application designed to manage property bookings and associated guest data. This project utilizes a **Clean Architecture** approach with **Laravel** for the RESTful API and **Vue 3 (Composition API)** for a reactive, user-friendly frontend.
 
 ---
 
-## Objectives
+## 📖 Project Context & Methodology
 
-- Complete the case in approximately **2 hours**.  
-- Follow **Laravel and Vue conventions**, ensuring clean, readable, and well-structured code.  
-- Demonstrate autonomy in providing a **user-friendly interface**, including responsive design and helpful user feedback.  
-- **Showcase end-to-end implementation skills:** Ability to build features that integrate frontend and backend seamlessly.  
-- **Use the provided stack:** Stylize with Tailwind CSS, use Vue 3 Composition API, Pinia, and Laravel Eloquent ORM.
+This project was originally developed as a technical challenge under a **strict 3-hour time constraint**. The core CRUD functionality and requirements were delivered within that timeframe.
 
+**Post-Submission Refactoring:**
+Following the initial submission, I treated the technical feedback as a rigorous **Code Review** and performed a refactoring phase to simulate a real-world production cycle. This phase focused on performance, UX, and error handling robustness.
 
+### 🚀 Key Improvements (Post-MVP)
 
-## Project Setup
+| Area | Challenge / Feedback | Solution Implemented |
+|------|----------------------|----------------------|
+| **Performance** | The search bar triggered API calls on every keystroke. | Implemented **Debouncing/Throttling** strategies to optimize server load and network traffic. |
+| **UX / State** | Creating a guest required a page refresh to update the UI. | Leveraged **Pinia's Reactive State** to update the grid instantly upon successful mutation (Optimistic UI). |
+| **Stability** | Validation errors caused layout shifts; lack of robust error handling. | Integrated seamless validation UI in **Tailwind**, wrapped critical logic in `try/catch` blocks, and added proper logging. |
+
+---
+
+## 🛠️ Technical Decisions & Architecture
+
+### Backend (Laravel)
+*   **Decoupled Validation:** Implemented dedicated **Form Requests** (`StoreGuestRequest`, `UpdateGuestRequest`) to keep Controllers clean and strictly adhere to the Single Responsibility Principle.
+*   **Database Integrity:** Designed a `1:N` relationship between `Bookings` and `Guests` using strict foreign key constraints.
+*   **Pagination:** API responses are paginated (9 items/page) to ensure scalability.
+*   **Testing:** **TDD approach** using **PHPUnit**. Feature tests cover the full CRUD lifecycle of Guests and ensure API structure integrity.
+
+### Frontend (Vue 3 + Pinia)
+*   **State Management:** Powered by **Pinia** to handle booking and guest data without unnecessary reloads.
+*   **Components:** Modular design using Vue 3 **Composition API** (`<script setup>`).
+*   **Styling:** Fully responsive layout built with **Tailwind CSS**.
+
+---
+
+## 📸 Screenshots
+
+![Dashboard Grid](./screenshots/dashboard.png) 
+
+---
+
+## ⚡ Getting Started
 
 ### Prerequisites
-- PHP 8.2+ with the SQLite extension enabled  
-- Composer  
-- Node.js + npm  
+*   PHP 8.2+ (with SQLite extension)
+*   Composer
+*   Node.js + NPM
 
-### Getting Started
-1. Install dependencies:  
-   `composer install`  
-   `npm install`  
-2. The `.env` file is already provided. If you prefer to regenerate it:  
-   `cp .env.example .env`  
-3. Run the app
-   `composer run dev`, access through `localhost:8000`
+### Installation
 
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/JuanjoSG5/laravel-vue-booking-manager.git
+    cd laravel-vue-booking-manager
+    ```
 
+2.  **Install Backend Dependencies:**
+    ```bash
+    composer install
+    ```
 
-## Project Context
+3.  **Install Frontend Dependencies:**
+    ```bash
+    npm install
+    ```
 
-The project includes a minimal setup to help you focus on the exercise:
+4.  **Environment Setup:**
+    ```bash
+    cp .env.example .env
+    touch database/database.sqlite
+    php artisan migrate --seed
+    # Or use the provided seeder command:
+    # php artisan initialize-bookings
+    ```
 
-### Laravel Backend
-- Configured to use **SQLite** (`database/database.sqlite` is committed) with dummy booking entries already included.  
-- Core **Booking model** and functionality are already implemented.  
-- The `getBookings` method in `MintyTestController` is exposed via `api.php` for fetching booking data.  
+5.  **Run the Application:**
+    ```bash
+    composer run dev
+    ```
+    Access the app at `http://localhost:8000`.
 
-### Frontend (Vue + Pinia)
-- `minty-test.js` Pinia store is provided and includes a method to fetch bookings from the API.  
-- `Welcome.vue` serves as the main container for the frontend exercise and is already tied to the Pinia store. This is where you will implement the UI to display bookings and manage guest data.
+---
 
-# Instructions
+## 🧪 Running Tests
 
-| Task | Description |
-|------|------------|
-| Implement new Guest data model | Add a new `create_guests_table.php` migration (`php artisan make:migration create_guests_table`) and implement the relevant `Guest` model. Add relationships to link guests to bookings. |
-| Display Bookings | Using the Pinia store, display the bookings in a **grid layout**. Ensure all relevant fields are shown and use **Tailwind CSS** to style the booking cards. |
-| Implement Guest Functionality | Extend the application to allow complete management of guest data. Users should be able to **create, read, update, and delete** guest entries directly linked to individual bookings. |
-| Guest Interface | Implement the guest functionality so that it is accessible **within each booking card**. You are free to choose the approach and layout that provides the best UX for managing guests. |
-| Extra Improvements (Optional) | If you still have extra time, consider adding polishing features such as a dynamic search to filter bookings by guest name and pagination for the bookings list. Focus on improving user experience. |
+To verify the integrity of the application and the new Guest CRUD features:
 
-# Other
+```bash
+php artisan test
+```
 
-You can use `php artisan initialize-bookings` to generate new dummy entries in the booking tables if necessary. 
+**Test Coverage Includes:**
+*   `GuestTest`: Verifies Create, Read, Update, and Delete flows.
+*   `BookingApiTest`: Ensures pagination and data structure correctness.
 
-# Good luck!
+---
+
+## 📝 Original Challenge Requirements
+
+<details>
+<summary>Click to view original task details</summary>
+
+### Objectives
+*   Implement a new feature to manage **guest data associated with bookings**.
+*   Expose data through the API and manage it via the UI.
+*   **Stack:** Laravel, Vue, Tailwind, Pinia.
+
+### Tasks Implemented
+1.  **Guest Data Model:** Created migrations, models, and relationships.
+2.  **Display Bookings:** Grid layout using Pinia and Tailwind.
+3.  **Guest Functionality:** Full CRUD accessible within each booking card.
+4.  **Extra Improvements:** 
+    *   Dynamic Search (with debounce).
+    *   Pagination.
+    *   UI/UX Refinements.
+
+</details>
