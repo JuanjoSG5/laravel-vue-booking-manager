@@ -80,10 +80,10 @@ const validateForm = () => {
     const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/;
     if (newGuest.phone_number && !phoneRegex.test(newGuest.phone_number)) {
         errors.phone_number = 'El teléfono contiene caracteres inválidos.';
-        isValid = false;
+        valid = false;
     } else if (newGuest.phone_number && newGuest.phone_number.length < 6) {
         errors.phone_number = 'El número es demasiado corto.';
-        isValid = false;
+        valid = false;
     }
 
     return valid;
@@ -91,42 +91,34 @@ const validateForm = () => {
 
 const saveGuest = async () => {
 
-    if (!validateForm()) {
-        return;
-    }
+    if (!validateForm()) return;
 
     isSubmitting.value = true;
-    let success = false;
+    try{
+        let success = false;
+        const payload = {
+            booking_id: props.booking.id, 
+            ...newGuest
+        };
 
-    if (editingGuestId.value){
-        const payload = {
-            id: editingGuestId.value,
-            booking_id: props.booking.id, 
-            ...newGuest
-        };
-    
-        success = await store.updateGuest(payload);
-    }else {
-        const payload = {
-            booking_id: props.booking.id, 
-            ...newGuest
-        };
-    
-        success = await store.addGuest(payload);
+        if (editingGuestId.value){        
+            success = await store.updateGuest({ id: editingGuestId.value, ...payload });
+        }else {
+            success = await store.addGuest(payload);
+        }
+
+
+        if (success) {
+            resetFormState();
+            isAddingGuest.value = false;
+            editingGuestId.value = null;
+        } 
+    } catch (error) {
+        console.error("Error en la operación:", error);
+        alert('Hubo un error de comunicación con el servidor.');
+    } finally {
+        isSubmitting.value = false;
     }
-
-
-    if (success) {
-        newGuest.first_name = '';
-        newGuest.last_name = '';
-        newGuest.email = '';
-        newGuest.phone_number = '';
-        isAddingGuest.value = false;
-        editingGuestId.value = null;
-    } else {
-        alert('Error al agregar el huésped.');
-    } 
-    isSubmitting.value = false;
 };
 
 const cancelForm = () => {
