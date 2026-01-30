@@ -156,12 +156,23 @@ const formatDate = (dateStr) => {
 <template>
     <div class="border border-gray-400 p-4 rounded mb-4 bg-white">
         
-        <div class="mb-6 pb-4 border-b border-gray-100 flex justify-between items-end">
+         <div class="mb-6 pb-4 border-b border-gray-100 flex justify-between items-center">
             <div>
-                <h2 class="font-bold text-2xl text-gray-800">Reserva #{{ booking.id }}</h2>
-                <div class="text-sm text-gray-500 mt-1 flex gap-3">
-                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Entrada: {{ formatDate(booking.checkin_at) }}</span>
-                    <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Salida: {{ formatDate(booking.checkout_at) }}</span>
+                <div class="flex items-center gap-3">
+                    <h2 class="font-bold text-xl text-gray-800">Reserva #{{ booking.id }}</h2>
+                    <!-- Badge de Status -->
+                    <span :class="{
+                        'bg-green-100 text-green-700': booking.status === 'confirmed',
+                        'bg-red-100 text-red-700': booking.status === 'cancelled',
+                        'bg-yellow-100 text-yellow-700': booking.status === 'pending'
+                    }" class="text-xs px-2 py-0.5 rounded-full font-semibold uppercase">
+                        {{ booking.status }}
+                    </span>
+                </div>
+                <div class="text-sm text-gray-500 mt-2 flex gap-3">
+                    <span>{{ formatDate(booking.checkin_at) }}</span>
+                    <span>➞</span>
+                    <span>{{ formatDate(booking.checkout_at) }}</span>
                 </div>
             </div>
         </div>
@@ -202,75 +213,61 @@ const formatDate = (dateStr) => {
             </div>
         </div>
         
-        <div>
+        <div v-if="booking.status !== 'cancelled'">
             <button 
                 v-if="!isAddingGuest" 
                 @click="openAddForm"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition">
+                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors shadow-sm">
                 + Añadir Huésped
             </button>
 
-            <form v-else @submit.prevent="saveGuest" class="bg-gray-50 p-3 mt-2 rounded border border-gray-200 shadow-sm">
-                <div class="flex flex-col gap-3">
-
-                    <div>
-                        <input 
-                            v-model="newGuest.first_name" 
-                            placeholder="Nombre" 
-                            class="border p-1 w-full rounded"
-                            :class="errors.first_name ? 'border-red-500 bg-red-50' : 'border-gray-300'"
-                        >
-                        <span v-if="errors.first_name" class="text-red-500 text-xs">{{ errors.first_name }}</span>
+            <form v-else @submit.prevent="saveGuest" class="bg-gray-50 p-4 mt-4 rounded-xl border border-gray-200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                    <div class="min-h-[75px]"> 
+                        <label class="text-xs font-bold text-gray-500 ml-1">Nombre</label>
+                        <input v-model="newGuest.first_name" placeholder="Ej: Juan" 
+                            class="border p-2 w-full rounded-md mt-1 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                            :class="errors.first_name ? 'border-red-500 bg-red-50' : 'border-gray-300'">
+                        <p class="text-red-500 text-[11px] mt-0.5 ml-1 h-3">{{ errors.first_name }}</p>
                     </div>
 
-                    <div>
-                        <input 
-                            v-model="newGuest.last_name" 
-                            placeholder="Apellidos" 
-                            class="border p-1 w-full rounded"
-                            :class="errors.last_name ? 'border-red-500 bg-red-50' : 'border-gray-300'"
-                        >
-                        <span v-if="errors.last_name" class="text-red-500 text-xs">{{ errors.last_name }}</span>
+                    <div class="min-h-[75px]">
+                        <label class="text-xs font-bold text-gray-500 ml-1">Apellidos</label>
+                        <input v-model="newGuest.last_name" placeholder="Ej: Sánchez" 
+                            class="border p-2 w-full rounded-md mt-1 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                            :class="errors.last_name ? 'border-red-500 bg-red-50' : 'border-gray-300'">
+                        <p class="text-red-500 text-[11px] mt-0.5 ml-1 h-3">{{ errors.last_name }}</p>
                     </div>
-
-                    <div>
-                        <input 
-                            v-model="newGuest.email" 
-                            type="text" 
-                            placeholder="Email" 
-                            class="border p-1 w-full rounded"
-                            :class="errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'"
-                        >
-                        <span v-if="errors.email" class="text-red-500 text-xs">{{ errors.email }}</span>
+                    <div class="min-h-[75px]">
+                        <label class="text-xs font-bold text-gray-500 ml-1">Email</label>
+                        <input v-model="newGuest.email" placeholder="Ej: juan@example.com" 
+                            class="border p-2 w-full rounded-md mt-1 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                            :class="errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'">
+                        <p class="text-red-500 text-[11px] mt-0.5 ml-1 h-3">{{ errors.email }}</p>
                     </div>
-
-                    <div>
-                        <input 
-                            v-model="newGuest.phone_number" 
-                            placeholder="Teléfono (Opcional)" 
-                            class="border p-1 w-full rounded"
-                            :class="errors.phone_number ? 'border-red-500 bg-red-50' : 'border-gray-300'"
-                        >
-                        <span v-if="errors.phone_number" class="text-red-500 text-xs">{{ errors.phone_number }}</span>
+                    <div class="min-h-[75px]">
+                        <label class="text-xs font-bold text-gray-500 ml-1">Telefono</label>
+                        <input v-model="newGuest.phone_number" placeholder="Ej: +34 600 123 456" 
+                            class="border p-2 w-full rounded-md mt-1 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                            :class="errors.phone_number ? 'border-red-500 bg-red-50' : 'border-gray-300'">
+                        <p class="text-red-500 text-[11px] mt-0.5 ml-1 h-3">{{ errors.phone_number }}</p>
                     </div>
                 </div>
 
-                <div class="mt-4 flex gap-2">
-                    <button 
-                        type="submit" 
-                        :disabled="isSubmitting" 
-                        class="bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white px-3 py-1 rounded transition">
-                        {{ isSubmitting ? 'Guardando...' : 'Guardar' }}
+                <div class="mt-2 flex gap-3">
+                    <button type="submit" :disabled="isSubmitting" 
+                        class="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-bold py-2 rounded-lg transition shadow-sm">
+                        {{ isSubmitting ? 'Procesando...' : (editingGuestId ? 'Actualizar' : 'Guardar') }}
                     </button>
-
-                    <button 
-                        type="button" 
-                        @click="cancelForm" 
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded transition">
+                    <button type="button" @click="cancelForm" 
+                        class="flex-1 bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 py-2 rounded-lg transition">
                         Cancelar
                     </button>
                 </div>
             </form>
+        </div>
+        <div v-else class="text-center p-3 bg-red-50 rounded-lg border border-red-100">
+            <p class="text-red-600 text-sm font-medium">Reserva cancelada: No se pueden gestionar huéspedes.</p>
         </div>
 
     </div>
