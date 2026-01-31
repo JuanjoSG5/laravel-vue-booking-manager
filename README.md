@@ -1,5 +1,8 @@
 # 🏨 Laravel & Vue Booking Management System
 
+> **This project was selected as Top 3% (Finalist Stage)** from 500+ applicants for a Tech Challenge.
+> This repository contains the **refactored version** addressing the technical feedback received during the process (Performance optimization, UX improvements & Error handling).
+
 ![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
